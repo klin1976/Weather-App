@@ -1,0 +1,350 @@
+/* ===========================================
+   Weather App - 天氣動畫
+   =========================================== */
+
+/* 晴天動畫 - 太陽光芒 */
+.weather-sunny .animation-layer {
+    background: linear-gradient(180deg, #87CEEB 0%, #FFE4B5 50%, #FFF8DC 100%);
+}
+
+.weather-sunny .animation-layer::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, #FFD700 0%, #FFA500 40%, transparent 70%);
+    border-radius: 50%;
+    animation: sunPulse 4s ease-in-out infinite;
+    box-shadow: 0 0 60px 30px rgba(255, 215, 0, 0.4);
+}
+
+@keyframes sunPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.9;
+    }
+}
+
+/* 太陽光線 */
+.sun-rays {
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    width: 120px;
+    height: 120px;
+}
+
+.sun-ray {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.6), transparent);
+    transform-origin: left center;
+    animation: rayRotate 20s linear infinite;
+}
+
+@keyframes rayRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 雨天動畫 */
+.weather-rainy .animation-layer {
+    background: linear-gradient(180deg, #4a5568 0%, #718096 50%, #a0aec0 100%);
+}
+
+.rain-drop {
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.6));
+    animation: rainFall linear infinite;
+}
+
+@keyframes rainFall {
+    0% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+/* 多雲動畫 */
+.weather-cloudy .animation-layer {
+    background: linear-gradient(180deg, #b8c6db 0%, #f5f7fa 100%);
+}
+
+.cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.9;
+    animation: cloudFloat linear infinite;
+}
+
+.cloud::before,
+.cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 60%;
+    height: 120%;
+    top: -50%;
+    left: 20%;
+}
+
+.cloud::after {
+    width: 40%;
+    height: 80%;
+    top: -30%;
+    right: 20%;
+}
+
+@keyframes cloudFloat {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100vw);
+    }
+}
+
+/* 夜晚動畫 */
+.weather-night .animation-layer {
+    background: linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle ease-in-out infinite;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* 月亮 */
+.moon {
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #f5f5f5 0%, #ddd 100%);
+    border-radius: 50%;
+    box-shadow:
+        inset -10px -10px 20px rgba(0, 0, 0, 0.1),
+        0 0 40px 10px rgba(255, 255, 255, 0.2);
+}
+
+/* 下雪動畫 */
+.weather-snowy .animation-layer {
+    background: linear-gradient(180deg, #e8eef1 0%, #cfd9df 100%);
+}
+
+.snowflake {
+    position: absolute;
+    color: white;
+    font-size: 1rem;
+    opacity: 0.8;
+    animation: snowFall linear infinite;
+}
+
+@keyframes snowFall {
+    0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.8;
+    }
+
+    90% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 霧氣效果 */
+.weather-foggy .animation-layer {
+    background: linear-gradient(180deg, #d5d5d5 0%, #e5e5e5 100%);
+}
+
+.fog-layer {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.4) 20%,
+            rgba(255, 255, 255, 0.6) 50%,
+            rgba(255, 255, 255, 0.4) 80%,
+            transparent 100%);
+    animation: fogMove 15s ease-in-out infinite alternate;
+}
+
+@keyframes fogMove {
+    0% {
+        transform: translateX(-25%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+/* 雷暴效果 */
+.weather-thunderstorm .animation-layer {
+    background: linear-gradient(180deg, #2c3e50 0%, #4a5568 100%);
+}
+
+.lightning {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    animation: lightningFlash 5s infinite;
+}
+
+@keyframes lightningFlash {
+
+    0%,
+    49%,
+    51%,
+    79%,
+    81%,
+    100% {
+        background: transparent;
+    }
+
+    50%,
+    80% {
+        background: rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* 載入動畫 */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.loading-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    animation: loadingBounce 0.6s ease-in-out infinite;
+}
+
+.loading-dot:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.loading-dot:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+@keyframes loadingBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* 淡入動畫 */
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 數字變化動畫 */
+.temp-change {
+    animation: tempPop 0.3s ease-out;
+}
+
+@keyframes tempPop {
+    0% {
+        transform: scale(0.9);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

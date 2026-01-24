@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="精緻的天氣應用程式，提供即時天氣資訊與動態天氣動畫">
+    <title>Weather App | 天氣應用程式</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- 動態背景容器 -->
+    <div id="weather-bg" class="weather-background">
+        <div class="animation-layer"></div>
+    </div>
+
+    <!-- 主應用程式 -->
+    <div class="app-container">
+        <!-- 頂部搜尋區 -->
+        <header class="search-section">
+            <div class="search-box">
+                <input type="text" id="city-input" placeholder="搜尋城市..." autocomplete="off">
+                <button id="search-btn" aria-label="搜尋">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor"
+                            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                </button>
+                <button id="location-btn" aria-label="使用目前位置">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <path fill="currentColor"
+                            d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
+                    </svg>
+                </button>
+            </div>
+            <div id="search-results" class="search-results hidden"></div>
+        </header>
+
+        <!-- 主要天氣卡片 -->
+        <main class="weather-main">
+            <section class="current-weather">
+                <div class="location-info">
+                    <div class="location-header">
+                        <h1 id="city-name">--</h1>
+                        <div class="location-actions">
+                            <button id="save-city-btn" class="icon-btn" aria-label="收藏城市" title="收藏城市">⭐</button>
+                            <button id="speak-btn" class="icon-btn" aria-label="語音播報" title="語音播報">🔊</button>
+                            <button id="share-btn" class="icon-btn" aria-label="分享天氣" title="分享天氣">📤</button>
+                        </div>
+                    </div>
+                    <p id="current-date">--</p>
+                </div>
+                <div class="temp-display">
+                    <span id="current-temp" class="temperature">--</span>
+                    <span class="degree">°C</span>
+                </div>
+                <div class="weather-condition">
+                    <span id="weather-icon" class="weather-icon">☀️</span>
+                    <span id="weather-desc">--</span>
+                </div>
+            </section>
+
+            <!-- 詳細資訊面板 -->
+            <section class="weather-details">
+                <div class="detail-card">
+                    <span class="detail-icon">💧</span>
+                    <span class="detail-label">濕度</span>
+                    <span id="humidity" class="detail-value">--%</span>
+                </div>
+                <div class="detail-card">
+                    <span class="detail-icon">💨</span>
+                    <span class="detail-label">風速</span>
+                    <span id="wind-speed" class="detail-value">-- km/h</span>
+                </div>
+                <div class="detail-card">
+                    <span class="detail-icon">🌡️</span>
+                    <span class="detail-label">體感溫度</span>
+                    <span id="feels-like" class="detail-value">--°C</span>
+                </div>
+                <div class="detail-card">
+                    <span class="detail-icon">🌅</span>
+                    <span class="detail-label">日出</span>
+                    <span id="sunrise" class="detail-value">--:--</span>
+                </div>
+                <div class="detail-card">
+                    <span class="detail-icon">🌇</span>
+                    <span class="detail-label">日落</span>
+                    <span id="sunset" class="detail-value">--:--</span>
+                </div>
+                <div class="detail-card">
+                    <span class="detail-icon">📊</span>
+                    <span class="detail-label">降雨機率</span>
+                    <span id="precipitation" class="detail-value">--%</span>
+                </div>
+                <div class="detail-card">
+                    <span class="detail-icon">☀️</span>
+                    <span class="detail-label">紫外線</span>
+                    <span id="uv-index" class="detail-value">--</span>
+                </div>
+                <div class="detail-card">
+                    <span class="detail-icon">🌬️</span>
+                    <span class="detail-label">空氣品質</span>
+                    <span id="aqi" class="detail-value">--</span>
+                </div>
+            </section>
+
+            <!-- 每小時預報 -->
+            <section class="hourly-section">
+                <h2>24 小時預報</h2>
+                <div id="hourly-container" class="hourly-cards">
+                    <!-- JS 動態生成 -->
+                </div>
+            </section>
+
+            <!-- 天氣圖表 -->
+            <section class="chart-section">
+                <h2>溫度趨勢</h2>
+                <div class="chart-container">
+                    <canvas id="temp-chart"></canvas>
+                </div>
+            </section>
+
+            <!-- 7 天預報 -->
+            <section class="forecast-section">
+                <h2>7 天預報</h2>
+                <div id="forecast-container" class="forecast-cards">
+                    <!-- JS 動態生成 -->
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部控制列 -->
+        <footer class="app-footer">
+            <button id="theme-toggle" class="theme-btn" aria-label="切換深淺色模式">
+                <span class="theme-icon">🌙</span>
+            </button>
+            <p class="credit">Powered by Open-Meteo</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

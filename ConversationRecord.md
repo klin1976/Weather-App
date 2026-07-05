@@ -84,3 +84,15 @@ Code Review 程式碼審查。
 - AI 透過 `gh` CLI 對失敗任務進行 Rerun。因任務排隊時間過長，AI 改採「建立空 Commit 並推送」的策略成功強制觸發全新的部署流程。
 - 重新部署順利完成 (Build & Deploy 均成功)，應用程式順利上線。
 - 用戶發出「收工」指令，AI 完成對話紀錄更新並推送至 GitHub 存檔，正式關閉專案。
+
+---
+
+## [2026-07-05T14:24:59+08:00] 用戶提問
+為什麼這專案中沒有如上圖的AGENTS.md檔案，我下命令專案初始化的目的之一是為了補上。也沒有補上目前專案資料。
+
+---
+
+## [2026-07-05T14:24:59+08:00] AI 回應
+- **專案管理文件**：參考 klin-gantt-chart 專案結構，於根目錄新增了 `AGENTS.md`（規範專案規格、約束與 API）與 `ConversationRecord.md`（Markdown 格式對話紀錄）。
+- **Obsidian 專案駕駛艙**：成功在 J 槽 Google Drive 的 Obsidian 筆記庫 (secondbrain) 下，建立 `Weather-App` 資料夾並新增「專案工作流程.md」筆記，記錄 Phase 1 至 Phase 4 變更與排障對策。
+- **存檔與推送**：將所有新增與修改的文件推送至 GitHub 以順利收工。

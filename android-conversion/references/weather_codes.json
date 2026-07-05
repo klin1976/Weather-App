@@ -1,0 +1,23 @@
+{
+  "0": { "description": "晴朗", "icon": "☀️", "animation": "sunny" },
+  "1": { "description": "晴時多雲", "icon": "🌤️", "animation": "sunny" },
+  "2": { "description": "多雲", "icon": "⛅", "animation": "cloudy" },
+  "3": { "description": "陰天", "icon": "☁️", "animation": "cloudy" },
+  "45": { "description": "霧", "icon": "🌫️", "animation": "foggy" },
+  "48": { "description": "結霜的霧", "icon": "🌫️", "animation": "foggy" },
+  "51": { "description": "毛毛雨 (輕微)", "icon": "🌧️", "animation": "rainy" },
+  "53": { "description": "毛毛雨 (中等)", "icon": "🌧️", "animation": "rainy" },
+  "55": { "description": "毛毛雨 (密集)", "icon": "🌧️", "animation": "rainy" },
+  "61": { "description": "雨 (輕微)", "icon": "🌧️", "animation": "rainy" },
+  "63": { "description": "雨 (中等)", "icon": "🌧️", "animation": "rainy" },
+  "65": { "description": "雨 (強烈)", "icon": "🌧️", "animation": "rainy" },
+  "71": { "description": "雪 (輕微)", "icon": "🌨️", "animation": "snowy" },
+  "73": { "description": "雪 (中等)", "icon": "🌨️", "animation": "snowy" },
+  "75": { "description": "雪 (強烈)", "icon": "🌨️", "animation": "snowy" },
+  "80": { "description": "陣雨 (輕微)", "icon": "🌦️", "animation": "rainy" },
+  "81": { "description": "陣雨 (中等)", "icon": "🌦️", "animation": "rainy" },
+  "82": { "description": "陣雨 (強烈)", "icon": "🌦️", "animation": "rainy" },
+  "95": { "description": "雷陣雨", "icon": "⛈️", "animation": "thunderstorm" },
+  "96": { "description": "雷陣雨伴隨輕微冰雹", "icon": "⛈️", "animation": "thunderstorm" },
+  "99": { "description": "雷陣雨伴隨強烈冰雹", "icon": "⛈️", "animation": "thunderstorm" }
+}

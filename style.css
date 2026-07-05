@@ -56,6 +56,11 @@ body {
     transition: background var(--transition-normal), color var(--transition-normal);
 }
 
+/* Ensure all cards transition nicely when theme changes */
+.detail-card, .search-box, .search-results, .current-weather, .forecast-section, .hourly-section, .chart-section, .env-card, .theme-btn {
+    transition: background var(--transition-normal), color var(--transition-normal), box-shadow var(--transition-fast), transform var(--transition-fast) !important;
+}
+
 /* 天氣背景 */
 .weather-background {
     position: fixed;
@@ -310,6 +315,72 @@ body {
     color: var(--text-primary);
 }
 
+/* 環境指標 (AQI & UV) */
+.environment-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.env-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.env-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.env-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.env-icon {
+    font-size: 1.5rem;
+}
+
+.env-header h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.env-body {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.env-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.env-desc {
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .env-desc {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+
 /* 7 天預報 */
 .forecast-section {
     background: var(--bg-card);
@@ -476,7 +547,6 @@ body {
     height: 44px;
     cursor: pointer;
     box-shadow: var(--shadow-soft);
-    transition: transform var(--transition-fast);
     display: flex;
     align-items: center;
     justify-content: center;

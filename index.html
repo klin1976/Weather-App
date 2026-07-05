@@ -98,15 +98,29 @@
                     <span class="detail-label">降雨機率</span>
                     <span id="precipitation" class="detail-value">--%</span>
                 </div>
-                <div class="detail-card">
-                    <span class="detail-icon">☀️</span>
-                    <span class="detail-label">紫外線</span>
-                    <span id="uv-index" class="detail-value">--</span>
+            </section>
+
+            <!-- 環境指標 (AQI & UV) -->
+            <section class="environment-section">
+                <div class="env-card aqi-card">
+                    <div class="env-header">
+                        <span class="env-icon">🌬️</span>
+                        <h3>空氣品質 (AQI)</h3>
+                    </div>
+                    <div class="env-body">
+                        <span id="aqi-value" class="env-value">--</span>
+                        <span id="aqi-desc" class="env-desc">--</span>
+                    </div>
                 </div>
-                <div class="detail-card">
-                    <span class="detail-icon">🌬️</span>
-                    <span class="detail-label">空氣品質</span>
-                    <span id="aqi" class="detail-value">--</span>
+                <div class="env-card uv-card">
+                    <div class="env-header">
+                        <span class="env-icon">☀️</span>
+                        <h3>紫外線指數</h3>
+                    </div>
+                    <div class="env-body">
+                        <span id="uv-value" class="env-value">--</span>
+                        <span id="uv-desc" class="env-desc">--</span>
+                    </div>
                 </div>
             </section>
 

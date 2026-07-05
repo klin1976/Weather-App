@@ -84,8 +84,10 @@ const elements = {
     sunrise: document.getElementById('sunrise'),
     sunset: document.getElementById('sunset'),
     precipitation: document.getElementById('precipitation'),
-    uvIndex: document.getElementById('uv-index'),
-    aqi: document.getElementById('aqi'),
+    uvValue: document.getElementById('uv-value'),
+    uvDesc: document.getElementById('uv-desc'),
+    aqiValue: document.getElementById('aqi-value'),
+    aqiDesc: document.getElementById('aqi-desc'),
     hourlyContainer: document.getElementById('hourly-container'),
     forecastContainer: document.getElementById('forecast-container'),
     themeToggle: document.getElementById('theme-toggle'),
@@ -95,7 +97,14 @@ const elements = {
 let currentLocation = { lat: null, lon: null, name: '' };
 let isDarkMode = false;
 let searchTimeout = null;
-let savedCities = JSON.parse(localStorage.getItem('weatherAppSavedCities')) || [];
+
+// 安全讀取 localStorage，避免因禁用或資料損壞導致異常
+let savedCities = [];
+try {
+    savedCities = JSON.parse(localStorage.getItem('weatherAppSavedCities')) || [];
+} catch (e) {
+    console.warn('無法讀取收藏城市:', e);
+}
 let chartInstance = null;
 
 // ==================== 初始化 ====================
@@ -118,7 +127,6 @@ function init() {
     // 收藏與語音播報
     const saveCityBtn = document.getElementById('save-city-btn');
     const speakBtn = document.getElementById('speak-btn');
-    if (saveCityBtn) saveCityBtn.addEventListener('click', saveCity);
     if (saveCityBtn) saveCityBtn.addEventListener('click', saveCity);
     if (speakBtn) speakBtn.addEventListener('click', speakWeather);
 
@@ -170,6 +178,7 @@ async function loadDefaultCity() {
         }
     } catch (error) {
         console.error('載入預設城市失敗:', error);
+        showError('無法載入預設城市，請手動搜尋');
     }
 }
 
@@ -213,7 +222,7 @@ async function searchCity(query) {
 /**
  * 取得天氣資料
  */
-async function fetchWeather(lat, lon) {
+async function fetchWeather(lat, lon, retries = 2) {
     try {
         const params = new URLSearchParams({
             latitude: lat,
@@ -227,20 +236,27 @@ async function fetchWeather(lat, lon) {
         });
 
         const response = await fetch(`${API_BASE}?${params}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
 
         updateWeatherUI(data);
         fetchAirQuality(lat, lon); // 同時取得空氣品質
         return data;
     } catch (error) {
-        console.error('取得天氣資料失敗:', error);
+        console.error(`取得天氣資料失敗 (${3 - retries}/3):`, error);
+        if (retries > 0) {
+            console.log(`正在重試天氣資料... 剩餘次數: ${retries}`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return fetchWeather(lat, lon, retries - 1);
+        }
+        showError('無法取得天氣資料，請檢查網路連線後重試');
     }
 }
 
 /**
  * 取得空氣品質資料
  */
-async function fetchAirQuality(lat, lon) {
+async function fetchAirQuality(lat, lon, retries = 2) {
     try {
         const params = new URLSearchParams({
             latitude: lat,
@@ -249,19 +265,32 @@ async function fetchAirQuality(lat, lon) {
         });
 
         const response = await fetch(`${AIR_QUALITY_API}?${params}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
 
         if (data.current) {
-            const aqi = data.current.us_aqi || 0;
+            const aqi = Math.round(data.current.us_aqi || 0);
             const aqiLevel = getAQILevel(aqi);
             const aqiColor = getAQIColor(aqi);
 
-            elements.aqi.textContent = aqiLevel;
-            elements.aqi.style.color = aqiColor;
+            if (elements.aqiValue && elements.aqiDesc) {
+                elements.aqiValue.textContent = aqi;
+                elements.aqiDesc.textContent = aqiLevel;
+                elements.aqiValue.style.color = aqiColor;
+                elements.aqiDesc.style.color = aqiColor;
+            }
         }
     } catch (error) {
-        console.error('取得空氣品質失敗:', error);
-        elements.aqi.textContent = 'N/A';
+        console.error(`取得空氣品質失敗 (${3 - retries}/3):`, error);
+        if (retries > 0) {
+            console.log(`正在重試空氣品質... 剩餘次數: ${retries}`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return fetchAirQuality(lat, lon, retries - 1);
+        }
+        if (elements.aqiValue && elements.aqiDesc) {
+            elements.aqiValue.textContent = 'N/A';
+            elements.aqiDesc.textContent = '--';
+        }
     }
 }
 
@@ -329,11 +358,12 @@ function updateWeatherUI(data) {
 
     // 紫外線指數
     const uvIndex = Math.round(daily.uv_index_max[0] || 0);
-    elements.uvIndex.textContent = getUVLevel(uvIndex);
-    elements.uvIndex.style.color = getUVColor(uvIndex);
-
-    // 空氣品質 (暫時顯示 N/A，稍後實作)
-    elements.aqi.textContent = 'N/A';
+    if (elements.uvValue && elements.uvDesc) {
+        elements.uvValue.textContent = uvIndex;
+        elements.uvDesc.textContent = getUVLevel(uvIndex);
+        elements.uvValue.style.color = getUVColor(uvIndex);
+        elements.uvDesc.style.color = getUVColor(uvIndex);
+    }
 
     // 每小時預報
     updateHourlyForecast(data.hourly);
@@ -501,6 +531,38 @@ function createSunRays(container) {
 
 // ==================== 工具函數 ====================
 
+/**
+ * 顯示錯誤訊息給使用者
+ */
+function showError(message) {
+    // 建立錯誤提示元素
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-toast';
+    errorDiv.textContent = message;
+    errorDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(244, 67, 54, 0.95);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-out;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    `;
+    document.body.appendChild(errorDiv);
+
+    // 3 秒後自動移除
+    setTimeout(() => {
+        errorDiv.style.opacity = '0';
+        errorDiv.style.transition = 'opacity 0.3s';
+        setTimeout(() => errorDiv.remove(), 300);
+    }, 3000);
+}
+
 function handleSearch() {
     const query = elements.cityInput.value.trim();
     if (query) {
@@ -588,11 +650,11 @@ function isNightTime(sunrise, sunset) {
  * 取得 UV Index 等級文字
  */
 function getUVLevel(uv) {
-    if (uv <= 2) return `${uv} 低`;
-    if (uv <= 5) return `${uv} 中等`;
-    if (uv <= 7) return `${uv} 高`;
-    if (uv <= 10) return `${uv} 極高`;
-    return `${uv} 危險`;
+    if (uv <= 2) return `低`;
+    if (uv <= 5) return `中等`;
+    if (uv <= 7) return `高`;
+    if (uv <= 10) return `極高`;
+    return `危險`;
 }
 
 /**
@@ -613,7 +675,6 @@ function updateHourlyForecast(hourly) {
     if (!hourly || !hourly.time) return;
 
     // 只顯示未來 24 小時
-    const now = new Date();
     const next24Hours = hourly.time.slice(0, 24);
 
     elements.hourlyContainer.innerHTML = next24Hours.map((time, index) => {
@@ -638,12 +699,12 @@ function updateHourlyForecast(hourly) {
  * 取得 AQI 等級文字
  */
 function getAQILevel(aqi) {
-    if (aqi <= 50) return `${Math.round(aqi)} 良好`;
-    if (aqi <= 100) return `${Math.round(aqi)} 中等`;
-    if (aqi <= 150) return `${Math.round(aqi)} 對敏感族群不健康`;
-    if (aqi <= 200) return `${Math.round(aqi)} 不健康`;
-    if (aqi <= 300) return `${Math.round(aqi)} 非常不健康`;
-    return `${Math.round(aqi)} 危險`;
+    if (aqi <= 50) return `良好`;
+    if (aqi <= 100) return `中等`;
+    if (aqi <= 150) return `對敏感族群不健康`;
+    if (aqi <= 200) return `不健康`;
+    if (aqi <= 300) return `非常不健康`;
+    return `危險`;
 }
 
 /**

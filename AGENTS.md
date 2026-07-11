@@ -9,7 +9,7 @@
 
 ### 同步規則
 
-**開工時：** 使用系統啟動同步，讀取本檔 `AGENTS.md` 與對話紀錄 `ConversationRecord.txt` / `ConversationRecord.md`，檢查 Git 狀態。  
+**開工時：** 使用系統啟動同步，讀取本檔 `AGENTS.md` 與對話紀錄 `ConversationRecord.txt` / `ConversationRecord.md`，並透過 Obsidian MCP 讀取專案筆記，接著檢查 Git 狀態。  
 **收工時：** 更新 `ConversationRecord.txt` 與 `ConversationRecord.md`，將變更 commit 並自動推送至 GitHub。  
 **新專案初始化時：** 若缺少核心規則文件，自動補齊 `AGENTS.md` 與 `ConversationRecord.md`。
 
@@ -57,5 +57,5 @@
 
 ## 工作流規範
 
-- **開工流程**：讀取 `AGENTS.md`、`ConversationRecord.txt`、`git status`、回報狀態。
+- **開工流程**：讀取 `AGENTS.md`、`ConversationRecord.txt`、透過 Obsidian MCP 讀取專案筆記、`git status`、回報狀態。
 - **收工流程**：檢查 Git 變更、更新 `ConversationRecord.txt` 與 `ConversationRecord.md`、執行 commit 並推送至 GitHub 觸發 Pages 自動部署。
